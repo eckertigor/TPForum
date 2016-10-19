@@ -17,7 +17,7 @@ public interface ForumDAO {
 
     Response listThreads(String forum, String since, Integer limit, String order, String[] related);
 
-    Response listUsers(String forum, Integer since, Integer limit, String order);
+    Response listUsers(String forum, Integer sinceId, Integer limit, String order);
 
 
 }
