@@ -47,6 +47,7 @@ public class ThreadDAOImpl implements ThreadDAO {
         try (Connection connection = dataSource.getConnection()) {
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 0;");
             TExecutor.execQuery(connection, "TRUNCATE TABLE Thread;");
+            TExecutor.execQuery(connection, "TRUNCATE TABLE Subscribe;");
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 1;");
         } catch (SQLException e) {
             e.printStackTrace();

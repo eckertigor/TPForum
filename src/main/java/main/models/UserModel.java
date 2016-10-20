@@ -42,18 +42,19 @@ public class UserModel {
                 new ArrayList<String>(), new ArrayList<Integer>(), about);
     }
 
-    public UserModel(JsonObject jsonObject) {
+    public UserModel(JsonObject jsonObject) throws Exception{
         this (
-                jsonObject.get("username").getAsString(),
-                jsonObject.get("name").getAsString(),
+                jsonObject.get("username").isJsonNull() ? null : jsonObject.get("username").getAsString(),
+                jsonObject.get("name").isJsonNull() ? null : jsonObject.get("name").getAsString(),
                 jsonObject.get("email").getAsString(),
                 jsonObject.get("isAnonymous").getAsBoolean(),
-                jsonObject.get("about").getAsString()
+                jsonObject.get("about").isJsonNull() ? null : jsonObject.get("about").getAsString()
         );
     }
 
     public UserModel(ResultSet resultSet) throws SQLException {
         this (
+                resultSet.getInt("id"),
                 resultSet.getString("username"),
                 resultSet.getString("name"),
                 resultSet.getString("email"),
@@ -61,6 +62,11 @@ public class UserModel {
                 resultSet.getString("about")
         );
     }
+
+    public UserModel(int id, String username, String name, String email, boolean isAnonymous, String about) {
+        this(id, username, name, email, isAnonymous, null, null, null, about);
+    }
+
 
     public List<Integer> getSubscriptions() {
         return subscriptions;
@@ -110,12 +116,12 @@ public class UserModel {
         this.email = email;
     }
 
-    public boolean isAnonymous() {
+    public boolean getIsAnonymous() {
         return isAnonymous;
     }
 
-    public void setAnonymous(boolean anonymous) {
-        isAnonymous = anonymous;
+    public void setAnonymous(boolean isAnonymous) {
+        isAnonymous = isAnonymous;
     }
 
     public List<String> getFollowers() {

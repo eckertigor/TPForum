@@ -44,6 +44,7 @@ public class ForumDAOImpl implements ForumDAO {
         try (Connection connection = dataSource.getConnection()) {
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 0;");
             TExecutor.execQuery(connection, "TRUNCATE TABLE Forum;");
+            TExecutor.execQuery(connection, "TRUNCATE TABLE forum_user;");
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 1;");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,10 +112,12 @@ public class ForumDAOImpl implements ForumDAO {
                     }
                 }
             }
-            if (Arrays.asList(related).contains("user")) {
-                forumModel.setUser(new UserDAOImpl(dataSource).details((String)forumModel.getUser()).getResponse());
-            } else {
-                return new Response(Response.Codes.INCORRECT_QUERY);
+            if (related != null) {
+                if (Arrays.asList(related).contains("user")) {
+                    forumModel.setUser(new UserDAOImpl(dataSource).details((String)forumModel.getUser()).getResponse());
+                } else {
+                    return new Response(Response.Codes.INCORRECT_QUERY);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

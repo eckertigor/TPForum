@@ -72,14 +72,14 @@ public class PostDAOImpl implements PostDAO {
             String query = "INSERT INTO Post (parent, isApproved, isHighlighted, isEdited, isSpam," +
                     "isDeleted, date, thread, message, user, forum) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                preparedStatement.setInt(1, postModel.getParent());
+                preparedStatement.setObject(1, postModel.getParent());
                 preparedStatement.setBoolean(2, postModel.isApproved());
                 preparedStatement.setBoolean(3, postModel.isHighlighted());
                 preparedStatement.setBoolean(4, postModel.isEdited());
                 preparedStatement.setBoolean(5, postModel.isSpam());
                 preparedStatement.setBoolean(6, postModel.isDeleted());
                 preparedStatement.setString(7, postModel.getDate());
-                preparedStatement.setString(8, (String) postModel.getThread());
+                preparedStatement.setInt(8, (Integer) postModel.getThread());
                 preparedStatement.setString(9, postModel.getMessage());
                 preparedStatement.setString(10, (String) postModel.getUser());
                 preparedStatement.setString(11, (String) postModel.getForum());

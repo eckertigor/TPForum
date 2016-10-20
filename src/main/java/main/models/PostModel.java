@@ -52,13 +52,13 @@ public class PostModel {
         );
     }
 
-    public PostModel(JsonObject jsonObject) {
+    public PostModel(JsonObject jsonObject) throws Exception{
         this (
-                jsonObject.get("thread").getAsString(),
+                jsonObject.get("thread").getAsInt(),
                 jsonObject.get("user").getAsString(),
                 jsonObject.get("forum").getAsString(),
                 jsonObject.get("message").getAsString(),
-                jsonObject.get("parent").getAsInt(),
+                !jsonObject.has("parent") || jsonObject.get("parent").isJsonNull() ? null : jsonObject.get("parent").getAsInt(),
                 jsonObject.get("isApproved").getAsBoolean(),
                 jsonObject.get("isHighlighted").getAsBoolean(),
                 jsonObject.get("isEdited").getAsBoolean(),

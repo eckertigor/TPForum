@@ -67,7 +67,7 @@ public class UserDAOImpl implements UserDAO {
                 preparedStatement.setString(2, userModel.getAbout());
                 preparedStatement.setString(3, userModel.getName());
                 preparedStatement.setString(4, userModel.getEmail());
-                preparedStatement.setBoolean(5, userModel.isAnonymous());
+                preparedStatement.setBoolean(5, userModel.getIsAnonymous());
                 preparedStatement.execute();
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                     if (resultSet.next()) {
