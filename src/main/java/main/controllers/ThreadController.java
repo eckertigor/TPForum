@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
-/**
- * alex on 05.01.16.
- */
 @RestController
 @RequestMapping(value = "/db/api/thread")
 public class ThreadController {
