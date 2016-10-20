@@ -12,6 +12,8 @@ public interface UserDAO {
 
     Response details(String email);
 
+    void truncateTable();
+
     Response follow(String jsonString);
 
     Response listFollowers(String user, Integer limit, String order, Integer sinceId);

@@ -46,7 +46,7 @@ public class ThreadDAOImpl implements ThreadDAO {
     public void truncateTable() {
         try (Connection connection = dataSource.getConnection()) {
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 0;");
-            TExecutor.execQuery(connection, "TRUNCATE TABLE Forum;");
+            TExecutor.execQuery(connection, "TRUNCATE TABLE Thread;");
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 1;");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -251,7 +251,7 @@ public class ThreadDAOImpl implements ThreadDAO {
         }
 
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SELECT * FROM thread ");
+        queryBuilder.append("SELECT * FROM Thread ");
         queryBuilder.append("WHERE user = ? ");
         if (since != null) {
             queryBuilder.append("AND date >= ? ");
@@ -307,7 +307,7 @@ public class ThreadDAOImpl implements ThreadDAO {
         }
 
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SELECT * FROM thread ");
+        queryBuilder.append("SELECT * FROM Thread ");
         queryBuilder.append("WHERE forum = ? ");
         if (since != null) {
             queryBuilder.append("AND date >= ? ");
@@ -500,7 +500,7 @@ public class ThreadDAOImpl implements ThreadDAO {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String query = "DELETE FROM subscribe WHERE user = ? AND thread = ?;";
+            String query = "DELETE FROM Subscribe WHERE user = ? AND thread = ?;";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, object.get("user").getAsString());
                 preparedStatement.setInt(2, object.get("thread").getAsInt());

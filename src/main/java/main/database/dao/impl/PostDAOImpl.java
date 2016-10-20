@@ -45,7 +45,7 @@ public class PostDAOImpl implements PostDAO {
     public void truncateTable() {
         try (Connection connection = dataSource.getConnection()) {
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 0;");
-            TExecutor.execQuery(connection, "TRUNCATE TABLE Forum;");
+            TExecutor.execQuery(connection, "TRUNCATE TABLE Post;");
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 1;");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,7 +153,7 @@ public class PostDAOImpl implements PostDAO {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String query = "UPDATE Post SET isDelted = 1 WHERE id = ?;";
+            String query = "UPDATE Post SET isDeleted = 1 WHERE id = ?;";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, jsonObject.get("post").getAsInt());
                 preparedStatement.execute();
@@ -175,7 +175,7 @@ public class PostDAOImpl implements PostDAO {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String query = "UPDATE Post SET isDelted = 0 WHERE id = ?;";
+            String query = "UPDATE Post SET isDeleted = 0 WHERE id = ?;";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, jsonObject.get("post").getAsInt());
                 preparedStatement.execute();

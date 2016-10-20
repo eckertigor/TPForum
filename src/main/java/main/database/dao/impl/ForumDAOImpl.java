@@ -67,7 +67,7 @@ public class ForumDAOImpl implements ForumDAO {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT INTO forum (name, short_name, user) VALUES (?,?,?);";
+            String query = "INSERT INTO Forum (name, short_name, user) VALUES (?,?,?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, forumModel.getName());
                 preparedStatement.setString(2, forumModel.getShort_name());
@@ -132,8 +132,8 @@ public class ForumDAOImpl implements ForumDAO {
             order = "desc";
         }
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SElECT * FROM post ");
-        queryBuilder.append("WHERE Forum = ? ");
+        queryBuilder.append("SElECT * FROM Post ");
+        queryBuilder.append("WHERE forum = ? ");
         if (since != null) {
             queryBuilder.append("AND date >= ? ");
         }
@@ -198,8 +198,8 @@ public class ForumDAOImpl implements ForumDAO {
             order = "desc";
         }
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SElECT * FROM Threads ");
-        queryBuilder.append("WHERE Forum = ? ");
+        queryBuilder.append("SElECT * FROM Thread ");
+        queryBuilder.append("WHERE forum = ? ");
         if (since != null) {
             queryBuilder.append("AND date >= ? ");
         }
@@ -256,16 +256,18 @@ public class ForumDAOImpl implements ForumDAO {
     @Override
     public Response listUsers(String forum, Integer sinceId, Integer limit, String order) {
         List<UserModel> array = new ArrayList<>();
-        if (order == null) {
-            order = "desc";
-        }
+
+        order = order == null ? "desc" : order;
+
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SElECT * FROM Users ");
-        queryBuilder.append("WHERE Forum = ? ");
+        queryBuilder.append("SELECT u.* FROM User u ");
+        queryBuilder.append("INNER JOIN forum_user fu ");
+        queryBuilder.append("ON u.email = fu.user ");
+        queryBuilder.append("WHERE fu.forum = ? ");
         if (sinceId != null) {
-            queryBuilder.append("AND id >= ? ");
+            queryBuilder.append("AND u.id >= ? ");
         }
-        queryBuilder.append("ORDER BY date ");
+        queryBuilder.append("ORDER BY u.name ");
         switch (order) {
             case "asc":
                 queryBuilder.append("ASC");
@@ -279,17 +281,17 @@ public class ForumDAOImpl implements ForumDAO {
         if (limit != null) {
             queryBuilder.append(" LIMIT ?");
         }
-        queryBuilder.append(";");
+        queryBuilder.append(';');
 
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(queryBuilder.toString())) {
-                int index = 0;
-                preparedStatement.setString(++index, forum);
+                int parameterIndex = 0;
+                preparedStatement.setString(++parameterIndex, forum);
                 if (sinceId != null) {
-                    preparedStatement.setInt(++index, sinceId);
+                    preparedStatement.setInt(++parameterIndex, sinceId);
                 }
                 if (limit != null) {
-                    preparedStatement.setInt(++index, limit);
+                    preparedStatement.setInt(++parameterIndex, limit);
                 }
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
@@ -304,8 +306,10 @@ public class ForumDAOImpl implements ForumDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return new Response(Response.Codes.INCORRECT_QUERY);
         }
+
         return new Response(array);
     }
-
 }
+

@@ -17,7 +17,6 @@ public class PostModel {
     private Integer parent;
     private int dislikes;
     private int likes;
-    private int points;
     private boolean isApproved;
     private boolean isHighlighted;
     private boolean isEdited;
@@ -26,7 +25,7 @@ public class PostModel {
     private String date;
 
     public PostModel(int id, Object thread, Object user, Object forum, String message, Integer parent,
-                     int dislikes, int likes, int points, boolean isApproved, boolean isHighlighted,
+                     int dislikes, int likes, boolean isApproved, boolean isHighlighted,
                      boolean isEdited, boolean isSpam, boolean isDeleted, String date) {
         this.id = id;
         this.thread = thread;
@@ -36,7 +35,6 @@ public class PostModel {
         this.parent = parent;
         this.dislikes = dislikes;
         this.likes = likes;
-        this.points = points;
         this.isApproved = isApproved;
         this.isHighlighted = isHighlighted;
         this.isEdited = isEdited;
@@ -49,7 +47,7 @@ public class PostModel {
                      boolean isApproved, boolean isHighlighted,
                      boolean isEdited, boolean isSpam, boolean isDeleted, String date) {
         this(
-                -1, thread, user, forum, message, parent, 0, 0, 0, isApproved, isHighlighted, isEdited,
+                -1, thread, user, forum, message, parent, 0, 0, isApproved, isHighlighted, isEdited,
                 isSpam, isDeleted, date
         );
     }
@@ -80,7 +78,6 @@ public class PostModel {
                 resultSet.getInt("parent"),
                 resultSet.getInt("dislikes"),
                 resultSet.getInt("likes"),
-                resultSet.getInt("points"),
                 resultSet.getBoolean("isApproved"),
                 resultSet.getBoolean("isHighlighted"),
                 resultSet.getBoolean("isEdited"),
@@ -153,14 +150,6 @@ public class PostModel {
 
     public void setLikes(int likes) {
         this.likes = likes;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public boolean isApproved() {

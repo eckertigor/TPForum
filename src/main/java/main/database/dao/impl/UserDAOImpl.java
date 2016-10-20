@@ -23,6 +23,9 @@ public class UserDAOImpl implements UserDAO {
 
     DataSource dataSource;
 
+    private static final int MYSQL_DUPLICATE_PK = 1062;
+
+
     public UserDAOImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -74,9 +77,24 @@ public class UserDAOImpl implements UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return new Response(Response.Codes.UNKNOWN_ERROR);
+            if (e.getErrorCode() == MYSQL_DUPLICATE_PK) {
+                return new Response(Response.Codes.USER_ALREDY_EXIST);
+            } else {
+                return new Response(Response.Codes.UNKNOWN_ERROR);
+            }
         }
         return new Response(userModel);
+    }
+
+    @Override
+    public void truncateTable() {
+        try (Connection connection = dataSource.getConnection()) {
+            TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 0;");
+            TExecutor.execQuery(connection, "TRUNCATE TABLE User;");
+            TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 1;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -184,7 +202,7 @@ public class UserDAOImpl implements UserDAO {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String query = "DELETE FROM Foloow WHERE follower = ? AND followee = ?";
+            String query = "DELETE FROM Follow WHERE follower = ? AND followee = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, jsonObject.get("follower").getAsInt());
                 preparedStatement.setInt(2, jsonObject.get("followee").getAsInt());
@@ -260,7 +278,7 @@ public class UserDAOImpl implements UserDAO {
             order = "desc";
         }
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SElECT u.* FROM User as u ");
+        queryBuilder.append("SELECT u.* FROM User as u ");
         queryBuilder.append("JOIN Follow as f ON u.email = f.followee ");
         queryBuilder.append("WHERE follower = ? ");
         if (sinceId != null) {
