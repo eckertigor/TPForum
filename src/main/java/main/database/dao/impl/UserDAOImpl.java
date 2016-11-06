@@ -182,8 +182,8 @@ public class UserDAOImpl implements UserDAO {
         try (Connection connection = dataSource.getConnection()) {
             String query = "INSERT IGNOR INTO Follow (follower, followee) VALUES(?, ?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, jsonObject.get("follower").getAsInt());
-                preparedStatement.setInt(2, jsonObject.get("followee").getAsInt());
+                preparedStatement.setString(1, jsonObject.get("follower").getAsString());
+                preparedStatement.setString(2, jsonObject.get("followee").getAsString());
                 preparedStatement.execute();
             }
         } catch (SQLException e) {
@@ -205,8 +205,8 @@ public class UserDAOImpl implements UserDAO {
         try (Connection connection = dataSource.getConnection()) {
             String query = "DELETE FROM Follow WHERE follower = ? AND followee = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, jsonObject.get("follower").getAsInt());
-                preparedStatement.setInt(2, jsonObject.get("followee").getAsInt());
+                preparedStatement.setString(1, jsonObject.get("follower").getAsString());
+                preparedStatement.setString(2, jsonObject.get("followee").getAsString());
                 preparedStatement.execute();
             }
         } catch (SQLException e) {
@@ -392,9 +392,9 @@ public class UserDAOImpl implements UserDAO {
         try (Connection connection = dataSource.getConnection()) {
             String query = "UPDATE User SET about = ?, name = ? WHERE email = ?;";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, jsonObject.get("about").getAsInt());
-                preparedStatement.setInt(2, jsonObject.get("name").getAsInt());
-                preparedStatement.setInt(3, jsonObject.get("user").getAsInt());
+                preparedStatement.setString(1, jsonObject.get("about").getAsString());
+                preparedStatement.setString(2, jsonObject.get("name").getAsString());
+                preparedStatement.setString(3, jsonObject.get("user").getAsString());
                 preparedStatement.execute();
             }
         } catch (SQLException e) {

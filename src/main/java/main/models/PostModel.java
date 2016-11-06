@@ -131,6 +131,10 @@ public class PostModel {
         this.message = message;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     public Integer getParent() {
         return parent;
     }
