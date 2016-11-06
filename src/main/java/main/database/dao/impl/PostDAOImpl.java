@@ -70,14 +70,14 @@ public class PostDAOImpl implements PostDAO {
 
         try (Connection connection = dataSource.getConnection()) {
             String query = "INSERT INTO Post (parent, isApproved, isHighlighted, isEdited, isSpam," +
-                    "isDeleted, date, thread, message, user, forum) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+                    " isDeleted, date, thread, message, user, forum) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setObject(1, postModel.getParent());
-                preparedStatement.setBoolean(2, postModel.isApproved());
-                preparedStatement.setBoolean(3, postModel.isHighlighted());
-                preparedStatement.setBoolean(4, postModel.isEdited());
-                preparedStatement.setBoolean(5, postModel.isSpam());
-                preparedStatement.setBoolean(6, postModel.isDeleted());
+                preparedStatement.setBoolean(2, postModel.getIsApproved());
+                preparedStatement.setBoolean(3, postModel.getIsHighlighted());
+                preparedStatement.setBoolean(4, postModel.getIsEdited());
+                preparedStatement.setBoolean(5, postModel.getIsSpam());
+                preparedStatement.setBoolean(6, postModel.getIsDeleted());
                 preparedStatement.setString(7, postModel.getDate());
                 preparedStatement.setInt(8, (Integer) postModel.getThread());
                 preparedStatement.setString(9, postModel.getMessage());
@@ -119,10 +119,13 @@ public class PostDAOImpl implements PostDAO {
                     postModel.setUser(new UserDAOImpl(dataSource).details((String) postModel.getUser()).getResponse());
                 }
                 if (Arrays.asList(related).contains("forum")) {
-                    postModel.setUser(new ForumDAOImpl(dataSource).details((String) postModel.getForum(), null).getResponse());
+                    postModel.setForum(new ForumDAOImpl(dataSource).details((String) postModel.getForum(), null).getResponse());
                 }
-                if (Arrays.asList(related).contains("user")) {
-                    postModel.setUser(new ThreadDAOImpl(dataSource).details((Integer) postModel.getThread(), null).getResponse());
+                if (Arrays.asList(related).contains("thread")) {
+                    postModel.setThread(new ThreadDAOImpl(dataSource).details((Integer) postModel.getThread(), null).getResponse());
+                }
+                else {
+                    return new Response(Response.Codes.INCORRECT_QUERY);
                 }
             }
         } catch (SQLException e) {
@@ -135,7 +138,7 @@ public class PostDAOImpl implements PostDAO {
 
     @Override
     public Response listThreadPosts(Integer thread, String since, Integer limit, String order) {
-        return new ThreadDAOImpl(dataSource).listPosts(thread, since, limit, order, null);
+        return new ThreadDAOImpl(dataSource).listPosts(thread, since, limit, null, order);
     }
 
     @Override

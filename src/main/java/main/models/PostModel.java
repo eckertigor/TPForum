@@ -17,6 +17,7 @@ public class PostModel {
     private Integer parent;
     private int dislikes;
     private int likes;
+    private int points;
     private boolean isApproved;
     private boolean isHighlighted;
     private boolean isEdited;
@@ -25,7 +26,7 @@ public class PostModel {
     private String date;
 
     public PostModel(int id, Object thread, Object user, Object forum, String message, Integer parent,
-                     int dislikes, int likes, boolean isApproved, boolean isHighlighted,
+                     int dislikes, int likes, int points, boolean isApproved, boolean isHighlighted,
                      boolean isEdited, boolean isSpam, boolean isDeleted, String date) {
         this.id = id;
         this.thread = thread;
@@ -35,6 +36,7 @@ public class PostModel {
         this.parent = parent;
         this.dislikes = dislikes;
         this.likes = likes;
+        this.points = points;
         this.isApproved = isApproved;
         this.isHighlighted = isHighlighted;
         this.isEdited = isEdited;
@@ -47,7 +49,7 @@ public class PostModel {
                      boolean isApproved, boolean isHighlighted,
                      boolean isEdited, boolean isSpam, boolean isDeleted, String date) {
         this(
-                -1, thread, user, forum, message, parent, 0, 0, isApproved, isHighlighted, isEdited,
+                -1, thread, user, forum, message, parent, 0, 0, 0, isApproved, isHighlighted, isEdited,
                 isSpam, isDeleted, date
         );
     }
@@ -75,9 +77,10 @@ public class PostModel {
                 resultSet.getString("user"),
                 resultSet.getString("forum"),
                 resultSet.getString("message"),
-                resultSet.getInt("parent"),
+                (Integer) resultSet.getObject("parent"),
                 resultSet.getInt("dislikes"),
                 resultSet.getInt("likes"),
+                resultSet.getInt("likes") - resultSet.getInt("dislikes"),
                 resultSet.getBoolean("isApproved"),
                 resultSet.getBoolean("isHighlighted"),
                 resultSet.getBoolean("isEdited"),
@@ -152,7 +155,7 @@ public class PostModel {
         this.likes = likes;
     }
 
-    public boolean isApproved() {
+    public boolean getIsApproved() {
         return isApproved;
     }
 
@@ -160,7 +163,7 @@ public class PostModel {
         isApproved = approved;
     }
 
-    public boolean isHighlighted() {
+    public boolean getIsHighlighted() {
         return isHighlighted;
     }
 
@@ -168,7 +171,7 @@ public class PostModel {
         isHighlighted = highlighted;
     }
 
-    public boolean isEdited() {
+    public boolean getIsEdited() {
         return isEdited;
     }
 
@@ -176,7 +179,7 @@ public class PostModel {
         isEdited = edited;
     }
 
-    public boolean isSpam() {
+    public boolean getIsSpam() {
         return isSpam;
     }
 
@@ -184,7 +187,7 @@ public class PostModel {
         isSpam = spam;
     }
 
-    public boolean isDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 

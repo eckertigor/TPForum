@@ -42,8 +42,8 @@ public class ThreadModel {
     }
 
     public ThreadModel(Object forum, String title, boolean isClosed, Object user, String date,
-                       String message, String slug, boolean isDeleted, int likes, int dislikes, int points, int posts) {
-        this (-1, forum, title, isClosed, user, date, message, slug, isDeleted, likes, dislikes, points, posts);
+                       String message, String slug, boolean isDeleted) {
+        this (-1, forum, title, isClosed, user, date, message, slug, isDeleted, 0, 0, 0, 0);
     }
 
     public ThreadModel(JsonObject jsonObject) {
@@ -55,16 +55,13 @@ public class ThreadModel {
                 jsonObject.get("date").getAsString(),
                 jsonObject.get("message").getAsString(),
                 jsonObject.get("slug").getAsString(),
-                jsonObject.get("isDeleted").getAsBoolean(),
-                jsonObject.get("likes").getAsInt(),
-                jsonObject.get("dislikes").getAsInt(),
-                jsonObject.get("points").getAsInt(),
-                jsonObject.get("posts").getAsInt()
+                jsonObject.get("isDeleted").getAsBoolean()
         );
     }
 
     public ThreadModel(ResultSet resultSet) throws SQLException {
         this (
+                resultSet.getInt("id"),
                 resultSet.getString("forum"),
                 resultSet.getString("title"),
                 resultSet.getBoolean("isClosed"),
@@ -103,7 +100,7 @@ public class ThreadModel {
         this.title = title;
     }
 
-    public boolean isClosed() {
+    public boolean getIsClosed() {
         return isClosed;
     }
 
@@ -143,7 +140,7 @@ public class ThreadModel {
         this.slug = slug;
     }
 
-    public boolean isDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 

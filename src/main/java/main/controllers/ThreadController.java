@@ -25,6 +25,10 @@ public class ThreadController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Response create(@RequestBody String body) {
+
+
+
+
         return threadDAO.create(body);
     }
 

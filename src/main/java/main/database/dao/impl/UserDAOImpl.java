@@ -91,6 +91,7 @@ public class UserDAOImpl implements UserDAO {
         try (Connection connection = dataSource.getConnection()) {
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 0;");
             TExecutor.execQuery(connection, "TRUNCATE TABLE User;");
+            TExecutor.execQuery(connection, "TRUNCATE TABLE Subscribe;");
             TExecutor.execQuery(connection, "SET FOREIGN_KEY_CHECKS = 1;");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -400,6 +401,6 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             return new Response(Response.Codes.INCORRECT_QUERY);
         }
-        return new Response(details(jsonObject.get("user").getAsString()));
+        return new Response(details(jsonObject.get("email").getAsString()));
     }
 }

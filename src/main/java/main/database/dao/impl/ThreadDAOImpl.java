@@ -98,12 +98,12 @@ public class ThreadDAOImpl implements ThreadDAO {
             try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, (String) threadModel.getForum());
                 preparedStatement.setString(2, threadModel.getTitle());
-                preparedStatement.setBoolean(3, threadModel.isClosed());
+                preparedStatement.setBoolean(3, threadModel.getIsClosed());
                 preparedStatement.setString(4, (String) threadModel.getUser());
                 preparedStatement.setString(5, threadModel.getDate());
                 preparedStatement.setString(6, threadModel.getMessage());
                 preparedStatement.setString(7, threadModel.getSlug());
-                preparedStatement.setBoolean(8, threadModel.isDeleted());
+                preparedStatement.setBoolean(8, threadModel.getIsDeleted());
                 preparedStatement.execute();
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                     if (resultSet.next()) {
@@ -141,6 +141,9 @@ public class ThreadDAOImpl implements ThreadDAO {
                     if (Arrays.asList(related).contains("forum")) {
                         threadModel.setForum(new ForumDAOImpl(dataSource)
                                 .details((String) threadModel.getForum(), null).getResponse());
+                    }
+                    else {
+                        return new Response(Response.Codes.INCORRECT_QUERY);
                     }
                 }
             }
