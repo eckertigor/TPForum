@@ -237,11 +237,13 @@ public class ForumDAOImpl implements ForumDAO {
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         ThreadModel threadModel = new ThreadModel(resultSet);
-                        if (Arrays.asList(related).contains("user")) {
-                            threadModel.setUser(new UserDAOImpl(dataSource).details((String) threadModel.getUser()).getResponse());
-                        }
-                        if (Arrays.asList(related).contains("forum")) {
-                            threadModel.setForum(details((String) threadModel.getForum(), null).getResponse());
+                        if (related != null) {
+                            if (Arrays.asList(related).contains("user")) {
+                                threadModel.setUser(new UserDAOImpl(dataSource).details((String) threadModel.getUser()).getResponse());
+                            }
+                            if (Arrays.asList(related).contains("forum")) {
+                                threadModel.setForum(details((String) threadModel.getForum(), null).getResponse());
+                            }
                         }
                         array.add(threadModel);
                     }
