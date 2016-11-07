@@ -180,7 +180,7 @@ public class UserDAOImpl implements UserDAO {
         }
 
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT IGNOR INTO Follow (follower, followee) VALUES(?, ?);";
+            String query = "INSERT IGNORE INTO Follow (follower, followee) VALUES(?, ?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, jsonObject.get("follower").getAsString());
                 preparedStatement.setString(2, jsonObject.get("followee").getAsString());
