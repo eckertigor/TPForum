@@ -401,6 +401,6 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             return new Response(Response.Codes.INCORRECT_QUERY);
         }
-        return new Response(details(jsonObject.get("email").getAsString()));
+        return new Response(details(jsonObject.get("user").getAsString()));
     }
 }
