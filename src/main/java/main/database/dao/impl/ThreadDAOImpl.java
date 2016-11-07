@@ -378,6 +378,13 @@ public class ThreadDAOImpl implements ThreadDAO {
                 preparedStatement.setInt(1, object.get("thread").getAsInt());
                 preparedStatement.execute();
             }
+
+            String deleteSubsQuery = "DELETE FROM Subscribe WHERE thread = ?;";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(deleteSubsQuery)) {
+                preparedStatement.setInt(1, object.get("thread").getAsInt());
+                preparedStatement.execute();
+            }
+
         } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
             return new Response(Response.Codes.INCORRECT_QUERY);

@@ -61,11 +61,11 @@ public class PostModel {
                 jsonObject.get("forum").getAsString(),
                 jsonObject.get("message").getAsString(),
                 !jsonObject.has("parent") || jsonObject.get("parent").isJsonNull() ? null : jsonObject.get("parent").getAsInt(),
-                jsonObject.get("isApproved").getAsBoolean(),
-                jsonObject.get("isHighlighted").getAsBoolean(),
-                jsonObject.get("isEdited").getAsBoolean(),
-                jsonObject.get("isSpam").getAsBoolean(),
-                jsonObject.get("isDeleted").getAsBoolean(),
+                jsonObject.has("isApproved") && jsonObject.get("isApproved").getAsBoolean(),
+                jsonObject.has("isHighlighted") && jsonObject.get("isHighlighted").getAsBoolean(),
+                jsonObject.has("isEdited") && jsonObject.get("isEdited").getAsBoolean(),
+                jsonObject.has("isSpam") && jsonObject.get("isSpam").getAsBoolean(),
+                jsonObject.has("isDeleted") && jsonObject.get("isDeleted").getAsBoolean(),
                 jsonObject.get("date").getAsString()
         );
     }

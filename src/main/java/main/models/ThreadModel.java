@@ -71,8 +71,8 @@ public class ThreadModel {
                 resultSet.getString("slug"),
                 resultSet.getBoolean("isDeleted"),
                 resultSet.getInt("likes"),
+                resultSet.getInt("dislikes"),
                 resultSet.getInt("likes") - resultSet.getInt("dislikes"),
-                resultSet.getInt("points"),
                 resultSet.getInt("posts")
         );
     }
