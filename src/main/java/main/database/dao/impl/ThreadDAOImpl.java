@@ -228,11 +228,20 @@ public class ThreadDAOImpl implements ThreadDAO {
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         PostModel postModel = new PostModel(resultSet);
-                        if (Objects.equals(sort, "parent_tree") && limit != null && postModel.getParent() == null) {
-                            if (limit > 0) {
+                        boolean contains = false;
+                        if (Objects.equals(sort, "parent_tree") && limit != null) {
+                            if (postModel.getParent() == null && limit > 0) {
                                 --limit;
-                            } else {
-                                break;
+                                contains = true;
+                            }
+                            for (PostModel postM: array) {
+                                if (postModel.getParent() != null && postM.getId() == postModel.getParent()) {
+                                    contains = true;
+                                    break;
+                                }
+                            }
+                            if (!contains) {
+                                continue;
                             }
                         }
                         array.add(postModel);
